@@ -17,7 +17,7 @@ def parse_rss_feed(rss_url, output_file="FactCheckNI_Articles.json"):
         title = item.find("title").text.strip()
         link = item.find("link").text.strip()
         creator = item.find("{http://purl.org/dc/elements/1.1/}creator")
-        author = creator.text.strip() if creator is not None else "Unknown"
+        author = creator.text.strip() if creator is not None and creator.text.strip() != "FactCheckNI" else ""
 
         # Parse and convert the pubDate
         pub_date_str = item.find("pubDate").text.strip()
@@ -29,7 +29,6 @@ def parse_rss_feed(rss_url, output_file="FactCheckNI_Articles.json"):
         description = item.find("description")
         if description is not None:
             soup = BeautifulSoup(description.text, "html.parser")
-            print(soup.get_text().split("\n"))
             text = soup.get_text().split("\n")[0].strip()
         else:
             text = ""
